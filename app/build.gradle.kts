@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":feature:movies"))
     implementation(project(":core:network"))
     implementation(project(":core:utils"))
+    implementation(project(":core:database"))
 
     implementation(project.dependencies.platform(libs.koin))
     implementation(libs.koin.core)

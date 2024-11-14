@@ -34,11 +34,14 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.viewmodel)
     implementation(libs.koin.coroutines)
+    implementation(libs.koin.android)
 
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
-    implementation(libs.moshi)
+    implementation(libs.room.runtime)
+    implementation(libs.room.paging)
 
+    implementation(libs.moshi)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
