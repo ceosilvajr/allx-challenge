@@ -17,7 +17,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-class MovieViewModel constructor(app: Application) : AndroidViewModel(app), KoinComponent {
+class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
 
     private val repository: MovieRepository by inject()
     private val networkManager: NetworkManager by inject()

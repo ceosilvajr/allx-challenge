@@ -8,10 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.galton.appetiserchallenge.pages.Greeting
-import com.galton.appetiserchallenge.ui.theme.AppetiserChallengeTheme
 import com.galton.network.NetworkManager
+import com.galton.utils.MyAppTheme
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
@@ -22,11 +23,12 @@ class MainActivity : ComponentActivity() {
     private val networkManager: NetworkManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         startNetworkObserver()
         enableEdgeToEdge()
         setContent {
-            AppetiserChallengeTheme {
+            MyAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",

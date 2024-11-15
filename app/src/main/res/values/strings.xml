@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Appetiser Challenge</string>
+    <string name="app_name">ALL X - Challenge</string>
     <string name="network_connected">Connected with the network</string>
     <string name="network_disconnected">No network connection</string>
 </resources>
