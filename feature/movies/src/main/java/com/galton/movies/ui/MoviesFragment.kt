@@ -8,7 +8,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.galton.movies.ui.pages.MoviesPage
 import com.galton.movies.viewmodel.MovieViewModel
+import com.galton.utils.MyAppTheme
 import com.galton.utils.Resource
 import timber.log.Timber
 
@@ -54,7 +56,9 @@ class MoviesFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-
+                MyAppTheme {
+                    MoviesPage("Success Navigation to MoviesFragment!")
+                }
             }
         }
     }
