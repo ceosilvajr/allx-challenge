@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.viewmodel)
     implementation(libs.koin.coroutines)
+    implementation(libs.koin.android)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
