@@ -1,10 +1,10 @@
-package com.galton.movies
+package com.galton.movies.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.galton.movies.repository.MovieRepository
 import com.galton.network.NetworkManager
 import com.galton.utils.Resource
 import com.galton.utils.toError
@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import timber.log.Timber
 
 class MovieViewModel constructor(app: Application) : AndroidViewModel(app), KoinComponent {
 
@@ -31,6 +32,7 @@ class MovieViewModel constructor(app: Application) : AndroidViewModel(app), Koin
             return
         }
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
+            Timber.e(t)
             _moviesNetworkCall.toError(message = t.message ?: "")
         }
         viewModelScope.launch(coroutineExceptionHandler) {
@@ -44,6 +46,7 @@ class MovieViewModel constructor(app: Application) : AndroidViewModel(app), Koin
 
     fun addFavorite(movieId: String) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
+            Timber.e(t)
             _moviesNetworkCall.toError(message = t.message ?: "")
         }
         viewModelScope.launch(coroutineExceptionHandler) {
@@ -54,8 +57,7 @@ class MovieViewModel constructor(app: Application) : AndroidViewModel(app), Koin
     fun getFilteredList(searchText: String?) {
         if (searchText.isNullOrBlank()) return
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
-            Log.e("", "", t)
-            // TODO add error handling
+            Timber.e(t)
         }
         viewModelScope.launch(coroutineExceptionHandler) {
             repository.getFilteredMovieList(searchText)

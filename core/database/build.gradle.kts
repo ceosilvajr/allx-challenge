@@ -30,6 +30,8 @@ android {
 dependencies {
     implementation(project(":core:models"))
 
+    implementation(libs.timber)
+
     implementation(project.dependencies.platform(libs.koin))
     implementation(libs.koin.core)
     implementation(libs.koin.viewmodel)

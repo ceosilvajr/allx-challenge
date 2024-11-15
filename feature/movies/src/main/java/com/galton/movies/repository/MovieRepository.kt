@@ -1,8 +1,8 @@
-package com.galton.movies
+package com.galton.movies.repository
 
-import android.util.Log
 import com.galton.database.movie.MovieDao
 import com.galton.database.movie.MovieTable
+import com.galton.movies.toMovieTable
 import com.galton.network.MoviesApiService
 
 class MovieRepository(val api: MoviesApiService, val movieDao: MovieDao) {
@@ -65,14 +65,11 @@ class MovieRepository(val api: MoviesApiService, val movieDao: MovieDao) {
     private suspend fun retainFavoritesData(response: List<MovieTable>) {
         val cachedFavorites = movieDao.getFavorites()
         if (cachedFavorites.isEmpty()) {
-            Log.d("MovieRepository", "cachedFavorites - empty")
             movieDao.clearThenInsert(response)
         } else {
             val cachedFavoriteIds = cachedFavorites.map { it.id }
-            Log.d("MovieRepository", "cachedFavorites - $cachedFavoriteIds")
-            movieDao.clearThenInsert(
-                response.filter { !cachedFavoriteIds.contains(it.id) }
-            )
+            val notFavoriteMovies = response.filter { !cachedFavoriteIds.contains(it.id) }
+            movieDao.clearThenInsert(cachedFavorites.plus(notFavoriteMovies))
         }
     }
 }

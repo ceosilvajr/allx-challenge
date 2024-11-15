@@ -30,6 +30,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.timber)
+
     implementation(project.dependencies.platform(libs.koin))
     implementation(libs.koin.viewmodel)
     implementation(libs.koin.android)

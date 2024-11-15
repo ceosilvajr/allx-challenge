@@ -23,6 +23,9 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        debug {
+            isMinifyEnabled = false
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -33,6 +36,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -41,6 +45,8 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:utils"))
     implementation(project(":core:database"))
+
+    implementation(libs.timber)
 
     implementation(project.dependencies.platform(libs.koin))
     implementation(libs.koin.core)
@@ -58,6 +64,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,9 +1,9 @@
 package com.galton.utils
 
 import android.os.Looper
-import android.util.Log
 import androidx.annotation.Keep
 import androidx.lifecycle.MutableLiveData
+import timber.log.Timber
 
 @Keep
 data class Resource<out T>(
@@ -174,6 +174,6 @@ fun <T> MutableLiveData<T>.setLiveDataValue(value: T?) {
         else
             this.postValue(value)
     } catch (t: Throwable) {
-        Log.d("Resource", t.message, t)
+        Timber.e(t, t.message)
     }
 }

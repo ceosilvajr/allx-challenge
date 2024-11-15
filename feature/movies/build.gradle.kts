@@ -35,6 +35,8 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:utils"))
 
+    implementation(libs.timber)
+
     implementation(project.dependencies.platform(libs.koin))
     implementation(libs.koin.core)
     implementation(libs.koin.viewmodel)
