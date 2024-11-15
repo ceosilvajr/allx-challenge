@@ -37,7 +37,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:favorites"))
     implementation(project(":feature:movies"))
     implementation(project(":core:network"))
     implementation(project(":core:utils"))
