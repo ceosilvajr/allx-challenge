@@ -28,24 +28,20 @@ class MoviesFragment : Fragment() {
         viewModel.moviesNetworkCall.observe(viewLifecycleOwner) {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
-                    // show hide loading
                     Timber.d("SUCCESS: ${it.data.toString()}")
                 }
 
                 Resource.Status.ERROR -> {
-                    // show hide loading
                     Timber.d("ERROR ${it.message}")
                 }
 
                 Resource.Status.NETWORK_DISCONNECTED -> {
-                    // show hide loading
                     Timber.d("NETWORK_DISCONNECTED ${it.message}")
                 }
 
                 Resource.Status.LOADING -> {
                     if (it.handled == false) {
                         Timber.d("MainActivity moviesLiveData LOADING ...")
-                        // show loading
                         it.handled = true
                     }
                 }

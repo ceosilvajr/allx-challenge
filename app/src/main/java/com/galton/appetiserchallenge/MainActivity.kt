@@ -1,6 +1,7 @@
 package com.galton.appetiserchallenge
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -31,8 +32,8 @@ class MainActivity : AppCompatActivity(R.layout.layout_main_activity) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-        super.onCreate(savedInstanceState)
         startNetworkObserver()
+        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
     }
 
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(R.layout.layout_main_activity) {
             if (it) {
                 Timber.d(getString(R.string.network_connected))
             } else {
-                Timber.d(getString(R.string.network_disconnected))
+                Toast.makeText(this, getString(R.string.network_disconnected), Toast.LENGTH_SHORT).show()
             }
         }.launchIn(lifecycleScope)
         networkManager.startListenNetworkState()
