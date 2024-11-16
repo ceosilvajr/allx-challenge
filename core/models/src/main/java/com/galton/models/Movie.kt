@@ -12,5 +12,7 @@ data class Movie(
     @Json(name = "artworkUrl100") val artworkUrl: String?,
     @Json(name = "trackPrice") val price: String?,
     @Json(name = "primaryGenreName") val genre: String?,
-    @Json(name = "longDescription") val description: String?
+    @Json(name = "longDescription") val description: String?,
+    @Json(name = "favorite") val favorite: Boolean?,
+    @Json(name = "artistName") val artistName: String?
 )
