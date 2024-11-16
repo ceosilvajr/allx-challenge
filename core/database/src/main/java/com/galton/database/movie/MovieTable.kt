@@ -13,5 +13,6 @@ data class MovieTable(
     @ColumnInfo(name = "price") val price: String?,
     @ColumnInfo(name = "genre") val genre: String?,
     @ColumnInfo(name = "description") val description: String?,
-    @ColumnInfo(name = "favorite") val favorite: Boolean?
+    @ColumnInfo(name = "favorite") val favorite: Boolean?,
+    @ColumnInfo(name = "artist_name") val artistName: String?
 )

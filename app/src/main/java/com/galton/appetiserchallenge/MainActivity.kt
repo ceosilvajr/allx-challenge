@@ -1,40 +1,39 @@
 package com.galton.appetiserchallenge
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.galton.appetiserchallenge.pages.Greeting
-import com.galton.appetiserchallenge.ui.theme.AppetiserChallengeTheme
+import androidx.navigation.findNavController
 import com.galton.network.NetworkManager
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity(R.layout.layout_main_activity) {
 
     private val networkManager: NetworkManager by inject()
 
+    /**
+     * Provides navigation capabilities within the app.
+     *
+     * This `NavController` is used to navigate between different fragments or
+     * activities within the application. Currently, it primarily supports
+     * navigation to the `MoviesFragment`. However, it is designed to be
+     * easily extensible for handling deep links and navigating to other
+     * features in the future.
+     */
+    val navController by lazy {
+        findNavController(R.id.app_nav)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        installSplashScreen()
         startNetworkObserver()
+        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            AppetiserChallengeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
     }
 
     private fun startNetworkObserver() {

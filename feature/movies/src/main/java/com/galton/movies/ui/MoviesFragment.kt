@@ -4,57 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.galton.movies.R
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.asFlow
+import com.galton.movies.ui.pages.MoviesPage
 import com.galton.movies.viewmodel.MovieViewModel
-import com.galton.utils.Resource
-import timber.log.Timber
+import com.galton.utils.MyAppTheme
 
 class MoviesFragment : Fragment() {
 
     private val viewModel: MovieViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-
-        viewModel.moviesLiveData.observe(viewLifecycleOwner) {
-            Timber.d("DATA CACHED $it")
-        }
-        viewModel.moviesNetworkCall.observe(viewLifecycleOwner) {
-            when (it.status) {
-                Resource.Status.SUCCESS -> {
-                    // show hide loading
-                    Timber.d("SUCCESS: ${it.data.toString()}")
-                }
-
-                Resource.Status.ERROR -> {
-                    // show hide loading
-                    Timber.d("ERROR ${it.message}")
-                }
-
-                Resource.Status.NETWORK_DISCONNECTED -> {
-                    // show hide loading
-                    Timber.d("NETWORK_DISCONNECTED ${it.message}")
-                }
-
-                Resource.Status.LOADING -> {
-                    if (it.handled == false) {
-                        Timber.d("MainActivity moviesLiveData LOADING ...")
-                        // show loading
-                        it.handled = true
-                    }
+    ): View {
+        viewModel.getMovies()
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MyAppTheme {
+                    val viewModel: MovieViewModel by viewModels()
+                    MoviesPage(
+                        viewModel.moviesLiveData.asFlow(),
+                        viewModel.moviesNetworkCall.asFlow()
+                    )
                 }
             }
         }
-        viewModel.getMovies()
-        viewModel.addFavorite("1727602354")
-
-        return inflater.inflate(R.layout.fragment_movies, container, false)
     }
 }

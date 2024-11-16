@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.galton.database.movie.MovieDao
 import com.galton.database.movie.MovieTable
 
-@Database(entities = [MovieTable::class], version = 1)
+@Database(entities = [MovieTable::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 }
