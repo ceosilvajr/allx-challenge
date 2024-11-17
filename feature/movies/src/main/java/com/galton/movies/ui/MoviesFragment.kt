@@ -8,7 +8,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.asFlow
 import com.galton.movies.ui.pages.MoviesPage
 import com.galton.movies.viewmodel.MovieViewModel
@@ -26,7 +25,6 @@ class MoviesFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MyAppTheme {
-                    val viewModel: MovieViewModel by viewModels()
                     MoviesPage(
                         viewModel.moviesLiveData.asFlow(),
                         viewModel.moviesNetworkCall.asFlow()
