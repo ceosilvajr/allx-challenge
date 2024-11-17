@@ -60,15 +60,18 @@ fun MovieItemView(movie: Movie) {
                 TextView(
                     TextView.Model(
                         string = movie.trackName,
+                        maxLines = 2,
                         textSizes = TextSizes.TITLE
                     )
                 )
+                Spacer(modifier = Modifier.padding(3.dp))
                 TextView(
                     TextView.Model(
                         string = movie.genre,
                         textSizes = TextSizes.DESCRIPTION
                     )
                 )
+                Spacer(modifier = Modifier.padding(1.dp))
                 TextView(
                     TextView.Model(
                         string = "AUD ${movie.price}",
