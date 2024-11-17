@@ -1,5 +1,6 @@
 package com.galton.movies.repository
 
+import androidx.paging.PagingSource
 import com.galton.database.movie.MovieDao
 import com.galton.database.movie.MovieTable
 import com.galton.movies.toMovieTable
@@ -15,8 +16,16 @@ class MovieRepository(val api: MoviesApiService, val movieDao: MovieDao) {
         return movieDao.getAll()
     }
 
-    suspend fun getFilteredMovieList(searchText: String): List<MovieTable> {
-        return movieDao.getFilteredList(searchText)
+    fun getPagingMovies(): PagingSource<Int, MovieTable> {
+        return movieDao.pagingMovies()
+    }
+
+    fun getSearchedMovies(searchText: String?): PagingSource<Int, MovieTable> {
+        return movieDao.pagingSearchedMovies(searchText)
+    }
+
+    suspend fun getFavoriteMovies(): List<MovieTable> {
+        return movieDao.getFavorites()
     }
 
     /**
@@ -35,19 +44,11 @@ class MovieRepository(val api: MoviesApiService, val movieDao: MovieDao) {
         retainFavoritesData(response)
     }
 
-    suspend fun getFilteredFavoriteMovieList(searchText: String): List<MovieTable> {
-        return movieDao.getFilteredFavoriteList(searchText, true)
-    }
-
-    suspend fun getFavoriteMovies(searchText: String): List<MovieTable> {
-        return getFilteredMovieList(searchText).filter { it.favorite == true }
-    }
-
-    suspend fun addFavoriteMovie(movieId: String) {
+    suspend fun addFavoriteMovie(movieId: Int) {
         movieDao.insertFavoriteMovie(movieId)
     }
 
-    suspend fun deleteFavoriteMovie(movieId: String) {
+    suspend fun deleteFavoriteMovie(movieId: Int) {
         movieDao.deleteFavoriteMovie(movieId)
     }
 

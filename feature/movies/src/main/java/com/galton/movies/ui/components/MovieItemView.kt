@@ -12,6 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,11 +28,15 @@ import com.galton.utils.cardContentPadding
 import com.galton.utils.cardElevation
 
 @Composable
-fun MovieItemView(movie: Movie) {
+fun MovieItemView(
+    movie: Movie,
+    onFavoriteItemClicked: (Boolean, Movie) -> Unit
+) {
+    var favoriteState by rememberSaveable { mutableStateOf(movie.favorite ?: false) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .padding(horizontal = 24.dp)
             .clickable { },
         elevation = CardDefaults.cardElevation(
             defaultElevation = cardElevation
@@ -82,12 +90,13 @@ fun MovieItemView(movie: Movie) {
             Spacer(Modifier)
             ImageView(
                 ImageView.Model(
-                    modifier = Modifier.padding(2.dp),
-                    drawableId = if (movie.favorite == true) {
-                        R.drawable.ic_fill_favorite
-                    } else {
-                        R.drawable.ic_not_fill_favorite
-                    },
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .clickable {
+                            favoriteState = favoriteState.not()
+                            onFavoriteItemClicked.invoke(favoriteState, movie)
+                        },
+                    drawableId = if (favoriteState) R.drawable.ic_fill_favorite else R.drawable.ic_not_fill_favorite,
                 )
             )
         }
@@ -99,14 +108,15 @@ fun MovieItemView(movie: Movie) {
 fun MovieItemPreview() {
     MovieItemView(
         Movie(
-            "-",
+            0,
             "A Star Is Born (2018)",
             null,
             "14.99",
             "Romance",
             "-",
-            true,
+            false,
             "Bradley Cooper",
-        )
+        ),
+        onFavoriteItemClicked = { _, _ -> }
     )
 }

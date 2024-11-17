@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     implementation(libs.room.paging)
+    implementation(libs.androidx.paging.runtime)
 
     implementation(libs.moshi)
     implementation(libs.androidx.core.ktx)

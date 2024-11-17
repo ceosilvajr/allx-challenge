@@ -14,7 +14,7 @@ data class MoviesResponse(
 @Keep
 @JsonClass(generateAdapter = true)
 data class MovieItem(
-    @Json(name = "collectionId") val id: String?,
+    @Json(name = "collectionId") val id: Int?,
     val trackName: String?,
     @Json(name = "artworkUrl100") val artworkUrl: String?,
     @Json(name = "trackPrice") val price: String?,

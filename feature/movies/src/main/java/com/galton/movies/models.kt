@@ -6,7 +6,7 @@ import com.galton.network.response.MovieItem
 
 fun MovieItem.toMovieTable(favorite: Boolean): MovieTable {
     return MovieTable(
-        id = this.id ?: "",
+        id = this.id ?: 0,
         name = this.trackName,
         imageUrl = this.artworkUrl,
         price = this.price,

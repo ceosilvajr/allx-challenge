@@ -7,7 +7,7 @@ import com.galton.database.MOVIE_TABLE
 
 @Entity(tableName = MOVIE_TABLE)
 data class MovieTable(
-    @PrimaryKey val id: String,
+    @PrimaryKey val id: Int,
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "image_url") val imageUrl: String?,
     @ColumnInfo(name = "price") val price: String?,

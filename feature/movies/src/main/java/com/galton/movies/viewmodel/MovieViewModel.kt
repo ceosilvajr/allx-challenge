@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.galton.movies.repository.MovieRepository
 import com.galton.network.NetworkManager
 import com.galton.utils.Resource
@@ -19,12 +22,31 @@ import timber.log.Timber
 
 class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
 
+    companion object {
+        private const val PAGING_PAGE_SIZE = 50
+    }
+
     private val repository: MovieRepository by inject()
     private val networkManager: NetworkManager by inject()
     private val _moviesNetworkCall = MutableLiveData<Resource<Boolean>>()
     val moviesNetworkCall = _moviesNetworkCall
 
     val moviesLiveData = repository.cachedMovies
+
+    fun moviesPager() = Pager(
+        config = PagingConfig(pageSize = PAGING_PAGE_SIZE),
+        pagingSourceFactory = {
+            repository.getPagingMovies()
+        }
+    ).flow.cachedIn(viewModelScope)
+
+    fun moviesPager(searchText: String?) = Pager(
+        config = PagingConfig(pageSize = PAGING_PAGE_SIZE),
+
+        pagingSourceFactory = {
+            repository.getSearchedMovies(searchText)
+        }
+    ).flow.cachedIn(viewModelScope)
 
     fun getMovies() {
         if (networkManager.isNetworkConnected.not()) {
@@ -44,23 +66,21 @@ class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
         }
     }
 
-    fun addFavorite(movieId: String) {
+    fun addFavorite(movieId: Int) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
             Timber.e(t)
-            _moviesNetworkCall.toError(message = t.message ?: "")
         }
         viewModelScope.launch(coroutineExceptionHandler) {
             repository.addFavoriteMovie(movieId)
         }
     }
 
-    fun getFilteredList(searchText: String?) {
-        if (searchText.isNullOrBlank()) return
+    fun deleteFavorite(movieId: Int) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
             Timber.e(t)
         }
         viewModelScope.launch(coroutineExceptionHandler) {
-            repository.getFilteredMovieList(searchText)
+            repository.deleteFavoriteMovie(movieId)
         }
     }
 }
