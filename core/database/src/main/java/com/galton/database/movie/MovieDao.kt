@@ -32,8 +32,8 @@ interface MovieDao {
 
     @Query(
         "SELECT * FROM $MOVIE_TABLE " +
-                "WHERE name LIKE '%' ||:searchText || '%' " +
-                "ORDER by name DESC"
+                "WHERE `name` LIKE :searchText || '%' " +
+                "ORDER by `name` DESC"
     )
     fun pagingSearchedMovies(searchText: String?): PagingSource<Int, MovieTable>
 

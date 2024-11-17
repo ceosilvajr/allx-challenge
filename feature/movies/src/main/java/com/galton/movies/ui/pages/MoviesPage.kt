@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
@@ -30,6 +31,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -39,6 +41,7 @@ import com.galton.models.Movie
 import com.galton.movies.R
 import com.galton.movies.toMovie
 import com.galton.movies.ui.components.MovieItemView
+import com.galton.movies.ui.components.TextView
 import kotlinx.coroutines.flow.flowOf
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -60,7 +63,9 @@ fun MoviesPage(
                 .semantics { isTraversalGroup = true }
         ) {
             Column(
-                modifier = Modifier.fillMaxSize().semantics { traversalIndex = 0f },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .semantics { traversalIndex = 0f },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SearchBar(
@@ -121,10 +126,13 @@ fun MovieList(
     pagingItems: LazyPagingItems<MovieTable>,
     onFavoriteItemClicked: (Boolean, Movie) -> Unit
 ) {
-    Box(modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 16.dp, bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        state = rememberLazyListState(),
+        content = {
             items(
                 pagingItems.itemCount,
                 key = pagingItems.itemKey { it.id }
@@ -136,8 +144,51 @@ fun MovieList(
                     }
                 }
             }
+            pagingItems.apply {
+                when {
+                    loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
+                        item {
+                            // Display Loader here.
+                        }
+                    }
+
+                    loadState.append is LoadState.NotLoading && loadState.append.endOfPaginationReached -> {
+                        item {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(20.dp)
+                            ) {
+                                TextView(
+                                    TextView.Model(
+                                        string = "Nothing to show here"
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                    loadState.refresh is LoadState.Error -> {
+                        item {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(20.dp)
+                            ) {
+                                TextView(
+                                    TextView.Model(
+                                        string = "Something went wrong"
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
-    }
+    )
 }
 
 @Preview
