@@ -2,7 +2,6 @@ package com.galton.movies.ui.pages
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -47,7 +46,6 @@ fun MoviesPage(
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    // This help retain the scroll state of pre populated movies.
     val moviesLazyListState = rememberLazyListState()
 
     Column(
@@ -97,11 +95,12 @@ fun MoviesPage(
             expanded = expanded,
             onExpandedChange = { expanded = it },
         ) {
-            MovieListView(rememberLazyListState(), searchedMoviesPagingItems, onFavoriteItemClicked)
+            MovieListView(Modifier, rememberLazyListState(), searchedMoviesPagingItems, onFavoriteItemClicked)
         }
         if (!expanded) {
-            Spacer(Modifier.padding(vertical = 8.dp))
-            MovieListView(moviesLazyListState, allMoviesPagingItems, onFavoriteItemClicked)
+            MovieListView(
+                Modifier.padding(top = 8.dp), moviesLazyListState, allMoviesPagingItems, onFavoriteItemClicked
+            )
         }
     }
 }

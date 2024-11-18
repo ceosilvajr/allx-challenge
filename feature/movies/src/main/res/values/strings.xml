@@ -7,4 +7,6 @@
     <string name="message_empty_list">Nothing to show here.</string>
     <string name="message_end_list">You reached the end of the list.</string>
     <string name="message_something_wrong">Something went wrong, contact the developer for support.</string>
+    <string name="tab_title_home">Home</string>
+    <string name="tab_title_favorites">Favorites</string>
 </resources>

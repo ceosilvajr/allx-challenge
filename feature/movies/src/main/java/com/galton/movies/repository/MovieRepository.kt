@@ -8,16 +8,12 @@ import com.galton.network.MoviesApiService
 
 class MovieRepository(val api: MoviesApiService, val movieDao: MovieDao) {
 
-    suspend fun getMovies(): List<MovieTable> {
-        return movieDao.getAll()
-    }
-
-    suspend fun getFavoriteMovies(): List<MovieTable> {
-        return movieDao.getFavorites()
-    }
-
     fun getPagingMovies(): PagingSource<Int, MovieTable> {
         return movieDao.pagingMovies()
+    }
+
+    fun getFavoriteMovies(): PagingSource<Int, MovieTable> {
+        return movieDao.pagingFavoriteMovies()
     }
 
     fun getSearchedMovies(searchText: String?): PagingSource<Int, MovieTable> {

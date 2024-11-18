@@ -20,6 +20,8 @@ composeBom = "2024.11.00"
 coil = "3.0.3"
 appcompat = "1.7.0"
 paging = "3.3.4"
+composeCompiler = "1.5.15"
+navigation = "2.8.4"
 material = "1.12.0"
 room = "2.6.1"
 retrofit = "2.9.0"
@@ -53,6 +55,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 

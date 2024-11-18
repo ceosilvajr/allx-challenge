@@ -26,12 +26,13 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun MovieListView(
+    modifier: Modifier,
     state: LazyListState = rememberLazyListState(),
     pagingItems: LazyPagingItems<MovieTable>,
     onFavoriteItemClicked: (Boolean, Movie) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = state,
         content = {
@@ -115,6 +116,7 @@ fun MovieListViewPreview() {
         )
     )
     MovieListView(
+        modifier = Modifier,
         pagingItems = list.collectAsLazyPagingItems(),
         onFavoriteItemClicked = { _, _ -> },
     )

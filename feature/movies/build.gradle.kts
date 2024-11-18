@@ -26,12 +26,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
+
     kotlinOptions {
         jvmTarget = "11"
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -61,6 +67,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.compose.coil)
     implementation(libs.compose.coil.network)
 

@@ -31,6 +31,13 @@ class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
         }
     ).flow.cachedIn(viewModelScope)
 
+    fun favoriteMoviesPager() = Pager(
+        config = PagingConfig(pageSize = PAGING_PAGE_SIZE),
+        pagingSourceFactory = {
+            repository.getFavoriteMovies()
+        }
+    ).flow.cachedIn(viewModelScope)
+
     fun moviesPager(searchText: String?) = Pager(
         config = PagingConfig(pageSize = PAGING_PAGE_SIZE),
 

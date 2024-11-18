@@ -1,6 +1,5 @@
 package com.galton.database.movie
 
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
@@ -12,23 +11,17 @@ import com.galton.database.MOVIE_TABLE
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * FROM $MOVIE_TABLE")
-    suspend fun getAll(): List<MovieTable>
-
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id = :id")
     fun getById(id: Int): MovieTable
-
-    @Query("SELECT * FROM $MOVIE_TABLE")
-    fun getAllLiveData(): LiveData<List<MovieTable>>
-
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE favorite = 1")
-    fun getFavoritesLiveData(): LiveData<List<MovieTable>>
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE favorite = 1")
     suspend fun getFavorites(): List<MovieTable>
 
     @Query("SELECT * FROM $MOVIE_TABLE ORDER by `name` ASC")
     fun pagingMovies(): PagingSource<Int, MovieTable>
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE favorite = 1 ORDER by `name` ASC")
+    fun pagingFavoriteMovies(): PagingSource<Int, MovieTable>
 
     @Query(
         "SELECT * FROM $MOVIE_TABLE " +
