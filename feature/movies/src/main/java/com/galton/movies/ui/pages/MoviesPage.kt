@@ -1,12 +1,9 @@
 package com.galton.movies.ui.pages
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -26,28 +23,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.isTraversalGroup
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.galton.database.movie.MovieTable
 import com.galton.models.Movie
 import com.galton.movies.R
-import com.galton.movies.toMovie
-import com.galton.movies.ui.components.MovieItemView
-import com.galton.movies.ui.components.TextView
+import com.galton.movies.ui.components.MovieListView
 import kotlinx.coroutines.flow.flowOf
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoviesPage(
+    modifier: Modifier,
     query: String?,
     allMoviesPagingItems: LazyPagingItems<MovieTable>,
     searchedMoviesPagingItems: LazyPagingItems<MovieTable>,
@@ -56,139 +47,63 @@ fun MoviesPage(
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    Box(Modifier.fillMaxSize()) {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .semantics { isTraversalGroup = true }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .semantics { traversalIndex = 0f },
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                SearchBar(
-                    inputField = {
-                        SearchBarDefaults.InputField(
-                            onSearch = { expanded = false },
-                            expanded = expanded,
-                            onExpandedChange = { expanded = it },
-                            placeholder = { Text(stringResource(R.string.search)) },
-                            leadingIcon = {
-                                if (expanded) {
-                                    IconButton(
-                                        onClick = { expanded = false },
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                            contentDescription = null,
-                                        )
-                                    }
-                                } else {
-                                    Icon(
-                                        imageVector = Icons.Default.Search,
-                                        contentDescription = null,
-                                    )
-                                }
-                            },
-                            trailingIcon = {
-                                if (query.isNullOrEmpty().not()) {
-                                    IconButton(
-                                        onClick = { onSearchQueryChange.invoke("") },
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Clear,
-                                            contentDescription = null,
-                                        )
-                                    }
-                                }
-                            },
-                            onQueryChange = onSearchQueryChange,
-                            query = query ?: ""
-                        )
-                    },
+    // This help retain the scroll state of pre populated movies.
+    val moviesLazyListState = rememberLazyListState()
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        SearchBar(
+            inputField = {
+                SearchBarDefaults.InputField(
+                    onSearch = { expanded = false },
                     expanded = expanded,
                     onExpandedChange = { expanded = it },
-                ) {
-                    MovieList(searchedMoviesPagingItems, onFavoriteItemClicked)
-                }
-                if (!expanded) {
-                    MovieList(allMoviesPagingItems, onFavoriteItemClicked)
-                }
-            }
+                    placeholder = { Text(stringResource(R.string.search)) },
+                    leadingIcon = {
+                        if (expanded) {
+                            IconButton(
+                                onClick = { expanded = false },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = null,
+                                )
+                            }
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                    trailingIcon = {
+                        if (query.isNullOrEmpty().not()) {
+                            IconButton(
+                                onClick = { onSearchQueryChange.invoke("") },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = null,
+                                )
+                            }
+                        }
+                    },
+                    onQueryChange = onSearchQueryChange,
+                    query = query ?: ""
+                )
+            },
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+        ) {
+            MovieListView(rememberLazyListState(), searchedMoviesPagingItems, onFavoriteItemClicked)
+        }
+        if (!expanded) {
+            Spacer(Modifier.padding(vertical = 8.dp))
+            MovieListView(moviesLazyListState, allMoviesPagingItems, onFavoriteItemClicked)
         }
     }
-}
-
-@Composable
-fun MovieList(
-    pagingItems: LazyPagingItems<MovieTable>,
-    onFavoriteItemClicked: (Boolean, Movie) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 16.dp, bottom = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        state = rememberLazyListState(),
-        content = {
-            items(
-                pagingItems.itemCount,
-                key = pagingItems.itemKey { it.id }
-            ) { index ->
-                val movie = pagingItems[index]?.toMovie()
-                if (movie != null) {
-                    MovieItemView(movie) { favorite, m ->
-                        onFavoriteItemClicked.invoke(favorite, m)
-                    }
-                }
-            }
-            pagingItems.apply {
-                when {
-                    loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
-                        item {
-                            // Display Loader here.
-                        }
-                    }
-
-                    loadState.append is LoadState.NotLoading && loadState.append.endOfPaginationReached -> {
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(20.dp)
-                            ) {
-                                TextView(
-                                    TextView.Model(
-                                        string = "Nothing to show here"
-                                    )
-                                )
-                            }
-                        }
-                    }
-
-                    loadState.refresh is LoadState.Error -> {
-                        item {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(20.dp)
-                            ) {
-                                TextView(
-                                    TextView.Model(
-                                        string = "Something went wrong"
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    )
 }
 
 @Preview
@@ -201,7 +116,7 @@ fun MoviesPagePreview() {
                     0,
                     "A Star Is Born (2018)",
                     null,
-                    "AUD 14.99",
+                    "14.99",
                     "Romance",
                     "-",
                     true,
@@ -211,7 +126,7 @@ fun MoviesPagePreview() {
                     0,
                     "A Star Is Born (2018)",
                     null,
-                    "AUD 14.99",
+                    "14.99",
                     "Romance",
                     "-",
                     false,
@@ -221,9 +136,10 @@ fun MoviesPagePreview() {
         )
     )
     MoviesPage(
-        "",
-        list.collectAsLazyPagingItems(),
-        list.collectAsLazyPagingItems(),
+        modifier = Modifier,
+        query = "",
+        allMoviesPagingItems = list.collectAsLazyPagingItems(),
+        searchedMoviesPagingItems = list.collectAsLazyPagingItems(),
         onFavoriteItemClicked = { _, _ -> },
         onSearchQueryChange = {}
     )

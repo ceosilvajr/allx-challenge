@@ -27,13 +27,13 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_TABLE WHERE favorite = 1")
     suspend fun getFavorites(): List<MovieTable>
 
-    @Query("SELECT * FROM $MOVIE_TABLE")
+    @Query("SELECT * FROM $MOVIE_TABLE ORDER by `name` ASC")
     fun pagingMovies(): PagingSource<Int, MovieTable>
 
     @Query(
         "SELECT * FROM $MOVIE_TABLE " +
                 "WHERE `name` LIKE :searchText || '%' " +
-                "ORDER by `name` DESC"
+                "ORDER by `name` ASC"
     )
     fun pagingSearchedMovies(searchText: String?): PagingSource<Int, MovieTable>
 
@@ -48,12 +48,6 @@ interface MovieDao {
 
     @Transaction
     suspend fun clearThenInsert(movies: List<MovieTable>) {
-        clearTable()
-        insertAll(movies)
-    }
-
-    @Transaction
-    suspend fun clearThenInsertFavorites(movies: List<MovieTable>) {
         clearTable()
         insertAll(movies)
     }
