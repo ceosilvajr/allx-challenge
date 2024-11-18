@@ -7,12 +7,16 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.galton.database.MOVIE_TABLE
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id = :id")
-    fun getById(id: Int): MovieTable
+    fun getById(id: Int): Flow<MovieTable>?
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE id = :id")
+    suspend fun getByIdSuspend(id: Int): MovieTable?
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE favorite = 1")
     suspend fun getFavorites(): List<MovieTable>
@@ -47,13 +51,17 @@ interface MovieDao {
 
     @Transaction
     suspend fun insertFavoriteMovie(movieId: Int) {
-        val movie = getById(movieId).copy(favorite = true)
-        insert(movie)
+        val movie = getByIdSuspend(movieId)?.copy(favorite = true)
+        if (movie != null) {
+            insert(movie)
+        }
     }
 
     @Transaction
     suspend fun deleteFavoriteMovie(movieId: Int) {
-        val movie = getById(movieId).copy(favorite = false)
-        insert(movie)
+        val movie = getByIdSuspend(movieId)?.copy(favorite = false)
+        if (movie != null) {
+            insert(movie)
+        }
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.em
 import com.galton.movies.R
 import com.galton.utils.descriptionTextSize
+import com.galton.utils.detailsTextSize
 import com.galton.utils.titleTextSize
 
 class TextView {
@@ -23,12 +24,12 @@ class TextView {
         val string: String? = null,
         @StringRes val stringId: Int? = null,
         val textSizes: TextSizes = TextSizes.TITLE,
-        val maxLines: Int = 1
+        val maxLines: Int = Int.MAX_VALUE
     )
 }
 
 enum class TextSizes {
-    TITLE, DESCRIPTION
+    TITLE, DESCRIPTION, DETAILS
 }
 
 @Composable
@@ -52,23 +53,37 @@ fun TextView(
     maxLines: Int = 1
 ) {
     val text = string ?: stringResource(id = stringId!!)
-    if (textSizes == TextSizes.TITLE) {
-        Text(
-            modifier = modifier,
-            maxLines = maxLines,
-            text = text,
-            fontSize = titleTextSize,
-            fontWeight = FontWeight.Bold,
-            style = textStyle()
-        )
-    } else {
-        Text(
-            modifier = modifier,
-            text = text,
-            maxLines = maxLines,
-            fontSize = descriptionTextSize,
-            style = textStyle()
-        )
+    when (textSizes) {
+        TextSizes.TITLE -> {
+            Text(
+                modifier = modifier,
+                maxLines = maxLines,
+                text = text,
+                fontSize = titleTextSize,
+                fontWeight = FontWeight.Bold,
+                style = textStyle()
+            )
+        }
+
+        TextSizes.DESCRIPTION -> {
+            Text(
+                modifier = modifier,
+                text = text,
+                maxLines = maxLines,
+                fontSize = descriptionTextSize,
+                style = textStyle()
+            )
+        }
+
+        TextSizes.DETAILS -> {
+            Text(
+                modifier = modifier,
+                text = text,
+                maxLines = maxLines,
+                fontSize = detailsTextSize,
+                style = textStyle()
+            )
+        }
     }
 }
 

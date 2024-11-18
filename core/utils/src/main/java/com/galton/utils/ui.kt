@@ -29,6 +29,7 @@ private val DarkColorScheme = darkColorScheme(
 
 val titleTextSize = 16.sp
 val descriptionTextSize = 12.sp
+val detailsTextSize = 14.sp
 
 val cardPadding = 8.dp
 val cardContentPadding = 12.dp

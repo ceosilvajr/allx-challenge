@@ -31,14 +31,17 @@ import com.galton.utils.cardElevation
 fun MovieItemView(
     modifier: Modifier,
     movie: Movie,
-    onFavoriteItemClicked: (Boolean, Movie) -> Unit
+    onFavoriteItemClicked: (Boolean, Movie) -> Unit,
+    onMovieItemClicked: (Movie) -> Unit
 ) {
     var favoriteState by rememberSaveable { mutableStateOf(movie.favorite ?: false) }
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
-            .clickable { },
+            .clickable {
+                onMovieItemClicked.invoke(movie)
+            },
         elevation = CardDefaults.cardElevation(
             defaultElevation = cardElevation
         )
@@ -108,8 +111,8 @@ fun MovieItemView(
 @Composable
 fun MovieItemPreview() {
     MovieItemView(
-        Modifier,
-        Movie(
+        modifier = Modifier,
+        movie = Movie(
             0,
             "A Star Is Born (2018)",
             null,
@@ -119,6 +122,7 @@ fun MovieItemPreview() {
             false,
             "Bradley Cooper",
         ),
-        onFavoriteItemClicked = { _, _ -> }
+        onFavoriteItemClicked = { _, _ -> },
+        onMovieItemClicked = {}
     )
 }

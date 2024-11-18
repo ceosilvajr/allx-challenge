@@ -9,6 +9,8 @@ import androidx.paging.cachedIn
 import com.galton.movies.repository.MovieRepository
 import com.galton.network.NetworkManager
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -23,6 +25,8 @@ class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
 
     private val repository: MovieRepository by inject()
     private val networkManager: NetworkManager by inject()
+
+    fun getMovieById(id: Int) = repository.getMovieById(id)
 
     fun moviesPager() = Pager(
         config = PagingConfig(pageSize = PAGING_PAGE_SIZE),

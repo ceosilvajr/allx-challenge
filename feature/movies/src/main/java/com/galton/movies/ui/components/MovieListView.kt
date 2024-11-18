@@ -1,5 +1,6 @@
 package com.galton.movies.ui.components
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,8 @@ fun MovieListView(
     modifier: Modifier,
     state: LazyListState = rememberLazyListState(),
     pagingItems: LazyPagingItems<MovieTable>,
-    onFavoriteItemClicked: (Boolean, Movie) -> Unit
+    onFavoriteItemClicked: (Boolean, Movie) -> Unit,
+    onMovieItemClicked: (Movie) -> Unit
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -44,10 +46,12 @@ fun MovieListView(
                 if (movie != null) {
                     MovieItemView(
                         modifier = Modifier.animateItem(),
-                        movie = movie
-                    ) { favorite, m ->
-                        onFavoriteItemClicked.invoke(favorite, m)
-                    }
+                        movie = movie,
+                        onFavoriteItemClicked = { favorite, m ->
+                            onFavoriteItemClicked.invoke(favorite, m)
+                        },
+                        onMovieItemClicked = onMovieItemClicked
+                    )
                 }
             }
             pagingItems.apply {
@@ -86,6 +90,7 @@ fun MovieListView(
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
 fun MovieListViewPreview() {
@@ -119,5 +124,6 @@ fun MovieListViewPreview() {
         modifier = Modifier,
         pagingItems = list.collectAsLazyPagingItems(),
         onFavoriteItemClicked = { _, _ -> },
+        onMovieItemClicked = {}
     )
 }

@@ -21,12 +21,17 @@ import kotlinx.coroutines.flow.flowOf
 fun FavoritesPage(
     modifier: Modifier,
     allMoviesPagingItems: LazyPagingItems<MovieTable>,
-    onFavoriteItemClicked: (Boolean, Movie) -> Unit
+    onFavoriteItemClicked: (Boolean, Movie) -> Unit,
+    onMovieItemClicked: (Movie) -> Unit
 ) {
     Box(modifier = modifier) {
         val moviesLazyListState = rememberLazyListState()
         MovieListView(
-            Modifier.padding(top = 8.dp), moviesLazyListState, allMoviesPagingItems, onFavoriteItemClicked
+            Modifier.padding(top = 16.dp),
+            moviesLazyListState,
+            allMoviesPagingItems,
+            onFavoriteItemClicked,
+            onMovieItemClicked
         )
     }
 }
@@ -45,7 +50,7 @@ fun FavoritesPagePreview() {
                     "Romance",
                     "-",
                     true,
-                    "Bradley Cooper",
+                    "Bradley Cooper"
                 ),
                 MovieTable(
                     0,
@@ -55,7 +60,7 @@ fun FavoritesPagePreview() {
                     "Romance",
                     "-",
                     false,
-                    "Bradley Cooper",
+                    "Bradley Cooper"
                 )
             )
         )
@@ -63,6 +68,7 @@ fun FavoritesPagePreview() {
     FavoritesPage(
         modifier = Modifier,
         allMoviesPagingItems = list.collectAsLazyPagingItems(),
-        onFavoriteItemClicked = { _, _ -> }
+        onFavoriteItemClicked = { _, _ -> },
+        onMovieItemClicked = {}
     )
 }

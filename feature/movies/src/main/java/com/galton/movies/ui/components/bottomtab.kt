@@ -17,10 +17,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.galton.movies.NavigationItem
 import com.galton.movies.R
-
-const val HOME_TAB_ID = "HOME_TAB_ID"
-const val FAVORITE_TAB_ID = "FAVORITE_TAB_ID"
 
 data class TabBarItem(
     val id: String,
@@ -31,15 +29,14 @@ data class TabBarItem(
 
 @Composable
 fun TabView(navController: NavController) {
-
     val home = TabBarItem(
-        id = HOME_TAB_ID,
+        id = NavigationItem.Home.route,
         title = stringResource(R.string.tab_title_home),
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home
     )
     val favorites = TabBarItem(
-        id = FAVORITE_TAB_ID,
+        id = NavigationItem.Favorite.route,
         title = stringResource(R.string.tab_title_favorites),
         selectedIcon = Icons.Filled.Favorite,
         unselectedIcon = Icons.Outlined.Favorite

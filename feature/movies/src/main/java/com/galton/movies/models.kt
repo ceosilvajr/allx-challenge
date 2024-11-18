@@ -29,3 +29,16 @@ fun MovieTable.toMovie(): Movie {
         artistName = this.artistName,
     )
 }
+
+fun movieInitialState(): Movie {
+    return Movie(
+        id = 0,
+        trackName = "",
+        artworkUrl = "",
+        price = "",
+        genre = "",
+        description = "",
+        favorite = false,
+        artistName = "",
+    )
+}

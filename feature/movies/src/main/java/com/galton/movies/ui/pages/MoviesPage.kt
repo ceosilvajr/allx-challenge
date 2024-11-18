@@ -43,6 +43,7 @@ fun MoviesPage(
     searchedMoviesPagingItems: LazyPagingItems<MovieTable>,
     onFavoriteItemClicked: (Boolean, Movie) -> Unit,
     onSearchQueryChange: (String) -> Unit,
+    onMovieItemClicked: (Movie) -> Unit
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
@@ -95,11 +96,21 @@ fun MoviesPage(
             expanded = expanded,
             onExpandedChange = { expanded = it },
         ) {
-            MovieListView(Modifier, rememberLazyListState(), searchedMoviesPagingItems, onFavoriteItemClicked)
+            MovieListView(
+                Modifier,
+                rememberLazyListState(),
+                searchedMoviesPagingItems,
+                onFavoriteItemClicked,
+                onMovieItemClicked
+            )
         }
         if (!expanded) {
             MovieListView(
-                Modifier.padding(top = 8.dp), moviesLazyListState, allMoviesPagingItems, onFavoriteItemClicked
+                Modifier.padding(top = 16.dp),
+                moviesLazyListState,
+                allMoviesPagingItems,
+                onFavoriteItemClicked,
+                onMovieItemClicked
             )
         }
     }
@@ -140,6 +151,7 @@ fun MoviesPagePreview() {
         allMoviesPagingItems = list.collectAsLazyPagingItems(),
         searchedMoviesPagingItems = list.collectAsLazyPagingItems(),
         onFavoriteItemClicked = { _, _ -> },
-        onSearchQueryChange = {}
+        onSearchQueryChange = {},
+        onMovieItemClicked = {}
     )
 }
