@@ -1,6 +1,5 @@
 package com.galton.movies.ui.pages
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,6 +36,7 @@ import com.galton.movies.ui.components.ImageView
 import com.galton.movies.ui.components.TextSizes
 import com.galton.movies.ui.components.TextView
 import com.galton.movies.viewmodel.MovieViewModel
+import com.galton.utils.Purple40
 
 @Composable
 fun MovieDetailsPage(
@@ -113,17 +118,16 @@ private fun MovieDetailsPage(
                     )
                 }
                 Spacer(Modifier)
-                ImageView(
-                    ImageView.Model(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .clickable {
-                                favoriteState = favoriteState.not()
-                                onFavoriteItemClicked(favoriteState, movie)
-                            },
-                        drawableId = if (favoriteState) R.drawable.ic_fill_favorite else R.drawable.ic_not_fill_favorite,
+                IconButton(onClick = {
+                    favoriteState = favoriteState.not()
+                    onFavoriteItemClicked.invoke(favoriteState, movie)
+                }) {
+                    Icon(
+                        imageVector = if (favoriteState) Icons.Outlined.Favorite else Icons.Filled.FavoriteBorder,
+                        tint = Purple40,
+                        contentDescription = null
                     )
-                )
+                }
             }
             Spacer(modifier = Modifier.padding(8.dp))
             TextView(
@@ -166,7 +170,7 @@ private fun MovieDetailsPage(
     }
 }
 
-@Preview(device = "id:pixel_6")
+@Preview
 @Composable
 fun MovieDetailsPagePreview() {
     val movie = Movie(

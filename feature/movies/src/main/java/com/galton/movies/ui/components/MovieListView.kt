@@ -35,7 +35,7 @@ fun MovieListView(
         state = listState,
         content = {
             items(
-                pagingItems.itemCount,
+                count = pagingItems.itemCount,
                 key = pagingItems.itemKey { it.id }
             ) { index ->
                 val movie = pagingItems[index]?.toMovie()

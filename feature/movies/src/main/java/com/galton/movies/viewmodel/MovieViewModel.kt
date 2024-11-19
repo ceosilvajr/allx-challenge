@@ -17,7 +17,7 @@ import timber.log.Timber
 class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
 
     companion object {
-        private const val PAGING_PAGE_SIZE = 110
+        private const val PAGING_PAGE_SIZE = 20
         private const val MESSAGE_NO_INTERNET = "No Internet Connection"
     }
 

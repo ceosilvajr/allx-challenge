@@ -20,7 +20,7 @@ fun MoviesPage(
     modifier: Modifier,
     pagingItems: LazyPagingItems<MovieTable>,
     onFavoriteItemClicked: (Boolean, Movie) -> Unit,
-    onMovieItemClicked: (Movie) -> Unit,
+    onMovieItemClicked: (Movie) -> Unit
 ) {
     val allMoviesListState = rememberLazyListState()
     Box(modifier = modifier) {

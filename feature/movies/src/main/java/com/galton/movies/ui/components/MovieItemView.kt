@@ -9,8 +9,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.galton.models.Movie
 import com.galton.movies.R
+import com.galton.utils.Purple40
 import com.galton.utils.cardContentPadding
 import com.galton.utils.cardElevation
 
@@ -66,7 +72,7 @@ fun MovieItemView(
             )
             Spacer(modifier = Modifier.padding(horizontal = 8.dp))
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).padding(top = 8.dp),
                 horizontalAlignment = Alignment.Start
             ) {
                 TextView(
@@ -91,18 +97,16 @@ fun MovieItemView(
                     )
                 )
             }
-            Spacer(Modifier)
-            ImageView(
-                ImageView.Model(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .clickable {
-                            favoriteState = favoriteState.not()
-                            onFavoriteItemClicked.invoke(favoriteState, movie)
-                        },
-                    drawableId = if (favoriteState) R.drawable.ic_fill_favorite else R.drawable.ic_not_fill_favorite,
+            IconButton(onClick = {
+                favoriteState = favoriteState.not()
+                onFavoriteItemClicked.invoke(favoriteState, movie)
+            }) {
+                Icon(
+                    imageVector = if (favoriteState) Icons.Outlined.Favorite else Icons.Filled.FavoriteBorder,
+                    tint = Purple40,
+                    contentDescription = null
                 )
-            )
+            }
         }
     }
 }
