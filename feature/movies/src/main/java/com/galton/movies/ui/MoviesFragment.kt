@@ -1,6 +1,5 @@
 package com.galton.movies.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,18 +11,18 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -35,18 +34,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.galton.movies.NavigationItem
 import com.galton.movies.R
 import com.galton.movies.ui.components.TabView
-import com.galton.movies.ui.pages.FavoritesPage
-import com.galton.movies.ui.pages.MovieDetailsPage
-import com.galton.movies.ui.pages.MoviesPage
+import com.galton.movies.ui.pages.ContentMain
 import com.galton.movies.viewmodel.MovieViewModel
 import com.galton.utils.MyAppTheme
 
@@ -55,7 +46,6 @@ class MoviesFragment : Fragment() {
     private val viewModel: MovieViewModel by activityViewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -70,6 +60,7 @@ class MoviesFragment : Fragment() {
                     ) {
                         val navController = rememberNavController()
                         val showBottomBar = rememberSaveable { (mutableStateOf(true)) }
+                        val showTopNavIcon = rememberSaveable { (mutableStateOf(true)) }
 
                         Scaffold(
                             topBar = {
@@ -80,6 +71,16 @@ class MoviesFragment : Fragment() {
                                     ),
                                     title = {
                                         Text(stringResource(R.string.title_top_bar))
+                                    },
+                                    navigationIcon = {
+                                        if (showTopNavIcon.value) {
+                                            IconButton(onClick = { navController.navigateUp() }) {
+                                                Icon(
+                                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                    contentDescription = null
+                                                )
+                                            }
+                                        }
                                     }
                                 )
                             },
@@ -104,54 +105,13 @@ class MoviesFragment : Fragment() {
                                 viewModel = viewModel,
                                 navController = navController,
                                 showBottomBar = showBottomBar,
+                                showTopNavIcon = showTopNavIcon,
                                 paddingValues = paddingValues
                             )
                         }
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun ContentMain(
-    viewModel: MovieViewModel,
-    navController: NavHostController,
-    showBottomBar: MutableState<Boolean>,
-    paddingValues: PaddingValues
-) {
-    NavHost(navController = navController, startDestination = NavigationItem.Home.route) {
-        composable(NavigationItem.Home.route) {
-            showBottomBar.value = true
-            MoviesPage(
-                modifier = Modifier.padding(paddingValues),
-                viewModel = viewModel,
-                onMovieItemClicked = {
-                    navController.navigate("${NavigationItem.MovieDetails.route}/${it.id}")
-                }
-            )
-        }
-        composable(NavigationItem.Favorite.route) {
-            showBottomBar.value = true
-            FavoritesPage(
-                modifier = Modifier.padding(paddingValues),
-                viewModel = viewModel,
-                onMovieItemClicked = {
-                    navController.navigate("${NavigationItem.MovieDetails.route}/${it.id}")
-                }
-            )
-        }
-        composable(
-            "${NavigationItem.MovieDetails.route}/{id}",
-            arguments = listOf(navArgument("id") { type = NavType.IntType })
-        ) { backStackEntry ->
-            showBottomBar.value = false
-            MovieDetailsPage(
-                modifier = Modifier.padding(paddingValues),
-                backStackEntry = backStackEntry,
-                viewModel = viewModel
-            )
         }
     }
 }
