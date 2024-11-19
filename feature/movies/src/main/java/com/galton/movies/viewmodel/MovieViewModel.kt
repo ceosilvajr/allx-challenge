@@ -9,8 +9,6 @@ import androidx.paging.cachedIn
 import com.galton.movies.repository.MovieRepository
 import com.galton.network.NetworkManager
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

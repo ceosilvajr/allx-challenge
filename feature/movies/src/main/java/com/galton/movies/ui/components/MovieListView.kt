@@ -1,16 +1,11 @@
 package com.galton.movies.ui.components
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,15 +23,16 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 fun MovieListView(
     modifier: Modifier,
-    state: LazyListState = rememberLazyListState(),
+    listState: LazyListState,
     pagingItems: LazyPagingItems<MovieTable>,
     onFavoriteItemClicked: (Boolean, Movie) -> Unit,
     onMovieItemClicked: (Movie) -> Unit
 ) {
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        state = state,
+        state = listState,
         content = {
             items(
                 pagingItems.itemCount,
@@ -58,12 +54,7 @@ fun MovieListView(
                 when {
                     loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
                         item {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .padding(20.dp)
-                                    .fillMaxSize()
-                                    .wrapContentSize(Alignment.Center)
-                            )
+                            // Loading component can be shown here.
                         }
                     }
 
@@ -90,7 +81,6 @@ fun MovieListView(
     )
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
 fun MovieListViewPreview() {
@@ -122,6 +112,7 @@ fun MovieListViewPreview() {
     )
     MovieListView(
         modifier = Modifier,
+        listState = rememberLazyListState(),
         pagingItems = list.collectAsLazyPagingItems(),
         onFavoriteItemClicked = { _, _ -> },
         onMovieItemClicked = {}

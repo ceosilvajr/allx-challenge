@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,23 +24,46 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import com.galton.models.Movie
 import com.galton.movies.R
 import com.galton.movies.movieInitialState
 import com.galton.movies.ui.components.ImageView
 import com.galton.movies.ui.components.TextSizes
 import com.galton.movies.ui.components.TextView
-import kotlinx.coroutines.flow.flowOf
+import com.galton.movies.viewmodel.MovieViewModel
 
 @Composable
 fun MovieDetailsPage(
     modifier: Modifier,
-    movieState: State<Movie>,
+    backStackEntry: NavBackStackEntry,
+    viewModel: MovieViewModel
+) {
+    val movie = viewModel.getMovieById(
+        backStackEntry.arguments?.getInt("id") ?: 0
+    )?.collectAsState(movieInitialState())
+
+    if (movie == null) return
+
+    MovieDetailsPage(modifier, movie.value) { favoriteState, data ->
+        data.id?.let {
+            if (favoriteState) {
+                viewModel.addFavorite(it)
+            } else {
+                viewModel.deleteFavorite(it)
+            }
+        }
+    }
+}
+
+@Composable
+private fun MovieDetailsPage(
+    modifier: Modifier,
+    movie: Movie,
     onFavoriteItemClicked: (Boolean, Movie) -> Unit
 ) {
-
     var favoriteState by rememberSaveable { mutableStateOf(false) }
-    favoriteState = movieState.value.favorite ?: false
+    favoriteState = movie.favorite ?: false
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -50,7 +72,7 @@ fun MovieDetailsPage(
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                val url = movieState.value.artworkUrl
+                val url = movie.artworkUrl
                 ImageView(
                     ImageView.Model(
                         modifier = Modifier
@@ -70,7 +92,7 @@ fun MovieDetailsPage(
                 ) {
                     TextView(
                         TextView.Model(
-                            string = movieState.value.trackName,
+                            string = movie.trackName,
                             maxLines = 2,
                             textSizes = TextSizes.TITLE
                         )
@@ -78,14 +100,14 @@ fun MovieDetailsPage(
                     Spacer(modifier = Modifier.padding(3.dp))
                     TextView(
                         TextView.Model(
-                            string = movieState.value.genre,
+                            string = movie.genre,
                             textSizes = TextSizes.DESCRIPTION
                         )
                     )
                     Spacer(modifier = Modifier.padding(1.dp))
                     TextView(
                         TextView.Model(
-                            string = "AUD ${movieState.value.price}",
+                            string = "AUD ${movie.price}",
                             textSizes = TextSizes.DESCRIPTION
                         )
                     )
@@ -97,7 +119,7 @@ fun MovieDetailsPage(
                             .padding(2.dp)
                             .clickable {
                                 favoriteState = favoriteState.not()
-                                onFavoriteItemClicked.invoke(favoriteState, movieState.value)
+                                onFavoriteItemClicked(favoriteState, movie)
                             },
                         drawableId = if (favoriteState) R.drawable.ic_fill_favorite else R.drawable.ic_not_fill_favorite,
                     )
@@ -106,19 +128,19 @@ fun MovieDetailsPage(
             Spacer(modifier = Modifier.padding(8.dp))
             TextView(
                 TextView.Model(
-                    string = movieState.value.description,
+                    string = movie.description,
                     textSizes = TextSizes.DETAILS
                 )
             )
             Spacer(modifier = Modifier.padding(8.dp))
             Row {
-                movieState.value.genre?.let {
+                movie.genre?.let {
                     SuggestionChip(modifier = Modifier.height(24.dp),
                         onClick = { },
                         label = {
                             TextView(
                                 TextView.Model(
-                                    string = movieState.value.genre,
+                                    string = movie.genre,
                                     textSizes = TextSizes.DESCRIPTION
                                 )
                             )
@@ -126,13 +148,13 @@ fun MovieDetailsPage(
                     )
                 }
                 Spacer(modifier = Modifier.padding(6.dp))
-                movieState.value.artistName?.let {
+                movie.artistName?.let {
                     SuggestionChip(modifier = Modifier.height(24.dp),
                         onClick = { },
                         label = {
                             TextView(
                                 TextView.Model(
-                                    string = movieState.value.artistName,
+                                    string = movie.artistName,
                                     textSizes = TextSizes.DESCRIPTION
                                 )
                             )
@@ -157,9 +179,5 @@ fun MovieDetailsPagePreview() {
         false,
         "Bradley Cooper"
     )
-    MovieDetailsPage(
-        modifier = Modifier.fillMaxSize(),
-        movieState = flowOf(movie).collectAsState(movieInitialState()),
-        onFavoriteItemClicked = { _, _ -> }
-    )
+    MovieDetailsPage(Modifier, movie) { _, _ -> }
 }

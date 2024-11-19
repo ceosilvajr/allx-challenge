@@ -21,7 +21,8 @@ fun EmptyView(@StringRes message: Int) {
     ) {
         TextView(
             TextView.Model(
-                stringId = message
+                stringId = message,
+                textSizes = TextSizes.DETAILS
             )
         )
     }

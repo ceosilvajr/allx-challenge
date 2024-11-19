@@ -3,7 +3,7 @@
     <string name="string_placeholder">Text</string>
     <string name="img_placeholder_description">Image</string>
     <string name="search">Search</string>
-    <string name="title_top_bar">Movies</string>
+    <string name="title_top_bar">MOVIE X</string>
     <string name="message_empty_list">Nothing to show here.</string>
     <string name="message_end_list">You reached the end of the list.</string>
     <string name="message_something_wrong">Something went wrong, contact the developer for support.</string>

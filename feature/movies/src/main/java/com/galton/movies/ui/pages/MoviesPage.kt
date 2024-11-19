@@ -1,27 +1,14 @@
 package com.galton.movies.ui.pages
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
@@ -29,87 +16,72 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.galton.database.movie.MovieTable
 import com.galton.models.Movie
-import com.galton.movies.R
 import com.galton.movies.ui.components.MovieListView
+import com.galton.movies.ui.components.MovieSearchBar
+import com.galton.movies.viewmodel.MovieViewModel
 import kotlinx.coroutines.flow.flowOf
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoviesPage(
     modifier: Modifier,
-    query: String?,
-    allMoviesPagingItems: LazyPagingItems<MovieTable>,
-    searchedMoviesPagingItems: LazyPagingItems<MovieTable>,
-    onFavoriteItemClicked: (Boolean, Movie) -> Unit,
-    onSearchQueryChange: (String) -> Unit,
-    onMovieItemClicked: (Movie) -> Unit
+    onMovieItemClicked: (Movie) -> Unit,
+    viewModel: MovieViewModel
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    val expandedState = rememberSaveable { mutableStateOf(false) }
+    val queryState = rememberSaveable { mutableStateOf<String?>(null) }
+    val allMoviesPagingItems = viewModel.moviesPager().collectAsLazyPagingItems()
+    val searchMoviesPagingItems = viewModel.moviesPager(queryState.value).collectAsLazyPagingItems()
 
-    val moviesLazyListState = rememberLazyListState()
+    MoviesPage(
+        modifier = modifier,
+        allMoviesPagingItems = allMoviesPagingItems,
+        searchMoviesPagingItems = searchMoviesPagingItems,
+        queryState = queryState,
+        expandedState = expandedState,
+        onFavoriteItemClicked = { favorite, movie ->
+            movie.id?.let {
+                if (favorite) {
+                    viewModel.addFavorite(it)
+                } else {
+                    viewModel.deleteFavorite(it)
+                }
+            }
+        },
+        onMovieItemClicked = onMovieItemClicked
+    )
+}
 
+@Composable
+private fun MoviesPage(
+    modifier: Modifier,
+    allMoviesPagingItems: LazyPagingItems<MovieTable>,
+    searchMoviesPagingItems: LazyPagingItems<MovieTable>,
+    queryState: MutableState<String?>,
+    expandedState: MutableState<Boolean>,
+    onFavoriteItemClicked: (Boolean, Movie) -> Unit,
+    onMovieItemClicked: (Movie) -> Unit,
+) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SearchBar(
-            inputField = {
-                SearchBarDefaults.InputField(
-                    onSearch = { expanded = false },
-                    expanded = expanded,
-                    onExpandedChange = { expanded = it },
-                    placeholder = { Text(stringResource(R.string.search)) },
-                    leadingIcon = {
-                        if (expanded) {
-                            IconButton(
-                                onClick = { expanded = false },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = null,
-                                )
-                            }
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                    trailingIcon = {
-                        if (query.isNullOrEmpty().not()) {
-                            IconButton(
-                                onClick = { onSearchQueryChange.invoke("") },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = null,
-                                )
-                            }
-                        }
-                    },
-                    onQueryChange = onSearchQueryChange,
-                    query = query ?: ""
-                )
-            },
-            expanded = expanded,
-            onExpandedChange = { expanded = it },
-        ) {
+        MovieSearchBar(Modifier, queryState) { expanded ->
+            expandedState.value = expanded
+
             MovieListView(
                 Modifier,
-                rememberLazyListState(),
-                searchedMoviesPagingItems,
-                onFavoriteItemClicked,
+                listState = rememberLazyListState(),
+                pagingItems = searchMoviesPagingItems,
+                onFavoriteItemClicked = onFavoriteItemClicked,
                 onMovieItemClicked
             )
         }
-        if (!expanded) {
+        if (!expandedState.value) {
             MovieListView(
                 Modifier.padding(top = 16.dp),
-                moviesLazyListState,
-                allMoviesPagingItems,
-                onFavoriteItemClicked,
+                listState = rememberLazyListState(),
+                pagingItems = allMoviesPagingItems,
+                onFavoriteItemClicked = onFavoriteItemClicked,
                 onMovieItemClicked
             )
         }
@@ -147,11 +119,11 @@ fun MoviesPagePreview() {
     )
     MoviesPage(
         modifier = Modifier,
-        query = "",
         allMoviesPagingItems = list.collectAsLazyPagingItems(),
-        searchedMoviesPagingItems = list.collectAsLazyPagingItems(),
+        searchMoviesPagingItems = list.collectAsLazyPagingItems(),
+        queryState = rememberSaveable { mutableStateOf<String?>(null) },
+        expandedState = rememberSaveable { mutableStateOf(false) },
         onFavoriteItemClicked = { _, _ -> },
-        onSearchQueryChange = {},
         onMovieItemClicked = {}
     )
 }

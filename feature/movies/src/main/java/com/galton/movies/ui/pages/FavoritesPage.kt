@@ -1,6 +1,5 @@
 package com.galton.movies.ui.pages
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,23 +13,46 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.galton.database.movie.MovieTable
 import com.galton.models.Movie
 import com.galton.movies.ui.components.MovieListView
+import com.galton.movies.viewmodel.MovieViewModel
 import kotlinx.coroutines.flow.flowOf
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FavoritesPage(
     modifier: Modifier,
-    allMoviesPagingItems: LazyPagingItems<MovieTable>,
+    viewModel: MovieViewModel,
+    onMovieItemClicked: (Movie) -> Unit
+) {
+    val pagingItems = viewModel.favoriteMoviesPager().collectAsLazyPagingItems()
+
+    FavoritesPage(
+        modifier = modifier,
+        pagingItems = pagingItems,
+        onFavoriteItemClicked = { favorite, movie ->
+            movie.id?.let {
+                if (favorite) {
+                    viewModel.addFavorite(it)
+                } else {
+                    viewModel.deleteFavorite(it)
+                }
+            }
+        }, onMovieItemClicked
+    )
+}
+
+@Composable
+private fun FavoritesPage(
+    modifier: Modifier,
+    pagingItems: LazyPagingItems<MovieTable>,
     onFavoriteItemClicked: (Boolean, Movie) -> Unit,
     onMovieItemClicked: (Movie) -> Unit
 ) {
+    val listState = rememberLazyListState()
     Box(modifier = modifier) {
-        val moviesLazyListState = rememberLazyListState()
         MovieListView(
             Modifier.padding(top = 16.dp),
-            moviesLazyListState,
-            allMoviesPagingItems,
-            onFavoriteItemClicked,
+            listState = listState,
+            pagingItems = pagingItems,
+            onFavoriteItemClicked = onFavoriteItemClicked,
             onMovieItemClicked
         )
     }
@@ -67,7 +89,7 @@ fun FavoritesPagePreview() {
     )
     FavoritesPage(
         modifier = Modifier,
-        allMoviesPagingItems = list.collectAsLazyPagingItems(),
+        pagingItems = list.collectAsLazyPagingItems(),
         onFavoriteItemClicked = { _, _ -> },
         onMovieItemClicked = {}
     )

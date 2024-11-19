@@ -1,5 +1,6 @@
 package com.galton.movies.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -17,6 +18,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.galton.movies.NavigationItem
 import com.galton.movies.R
 
@@ -27,6 +31,7 @@ data class TabBarItem(
     val unselectedIcon: ImageVector
 )
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun TabView(navController: NavController) {
     val home = TabBarItem(
@@ -46,12 +51,20 @@ fun TabView(navController: NavController) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
 
     NavigationBar {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
         tabBarItems.forEachIndexed { index, tabBarItem ->
             NavigationBarItem(
-                selected = selectedTabIndex == index,
+                selected = currentDestination?.hierarchy?.any { it.hasRoute(tabBarItem.id, null) } == true,
                 onClick = {
                     selectedTabIndex = index
-                    navController.navigate(tabBarItem.id)
+                    navController.navigate(tabBarItem.id) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 icon = {
                     TabBarIconView(
