@@ -76,8 +76,8 @@ private fun MovieDetailsPage(
                 ImageView(
                     ImageView.Model(
                         modifier = Modifier
-                            .width(60.dp)
-                            .height(84.dp)
+                            .width(70.dp)
+                            .height(95.dp)
                             .clip(RoundedCornerShape(4.dp)),
                         url = url,
                         contentScale = ContentScale.Crop,

@@ -2,9 +2,7 @@ package com.galton.movies.ui.components
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -27,8 +25,7 @@ import com.galton.movies.R
 data class TabBarItem(
     val id: String,
     val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector
+    val icon: ImageVector
 )
 
 @SuppressLint("RestrictedApi")
@@ -37,14 +34,12 @@ fun TabView(navController: NavController) {
     val home = TabBarItem(
         id = NavigationItem.Home.route,
         title = stringResource(R.string.tab_title_home),
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home
+        icon = Icons.Outlined.Home
     )
     val favorites = TabBarItem(
         id = NavigationItem.Favorite.route,
         title = stringResource(R.string.tab_title_favorites),
-        selectedIcon = Icons.Filled.Favorite,
-        unselectedIcon = Icons.Outlined.Favorite
+        icon = Icons.Outlined.FavoriteBorder
     )
     val tabBarItems = listOf(home, favorites)
 
@@ -67,11 +62,9 @@ fun TabView(navController: NavController) {
                     }
                 },
                 icon = {
-                    TabBarIconView(
-                        isSelected = selectedTabIndex == index,
-                        selectedIcon = tabBarItem.selectedIcon,
-                        unselectedIcon = tabBarItem.unselectedIcon,
-                        title = tabBarItem.title
+                    Icon(
+                        imageVector = tabBarItem.icon,
+                        contentDescription = tabBarItem.title
                     )
                 },
                 label = {
@@ -81,22 +74,6 @@ fun TabView(navController: NavController) {
     }
 }
 
-@Composable
-fun TabBarIconView(
-    isSelected: Boolean,
-    selectedIcon: ImageVector,
-    unselectedIcon: ImageVector,
-    title: String
-) {
-    Icon(
-        imageVector = if (isSelected) {
-            selectedIcon
-        } else {
-            unselectedIcon
-        },
-        contentDescription = title
-    )
-}
 
 @Preview
 @Composable
