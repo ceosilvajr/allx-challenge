@@ -3,7 +3,6 @@ package com.galton.movies.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,15 +18,16 @@ import com.galton.models.Movie
 import com.galton.movies.R
 import com.galton.movies.toMovie
 import kotlinx.coroutines.flow.flowOf
+import kotlin.random.Random
 
 @Composable
 fun MovieListView(
     modifier: Modifier,
-    listState: LazyListState,
     pagingItems: LazyPagingItems<MovieTable>,
     onFavoriteItemClicked: (Boolean, Movie) -> Unit,
     onMovieItemClicked: (Movie) -> Unit
 ) {
+    val listState = rememberLazyListState()
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -36,12 +36,14 @@ fun MovieListView(
         content = {
             items(
                 count = pagingItems.itemCount,
-                key = pagingItems.itemKey { it.id }
+                key = pagingItems.itemKey {
+                    "${it.id}${Random.nextInt()}" // This will make sure that the items are not duplicated
+                }
             ) { index ->
                 val movie = pagingItems[index]?.toMovie()
                 if (movie != null) {
                     MovieItemView(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier,
                         movie = movie,
                         onFavoriteItemClicked = { favorite, m ->
                             onFavoriteItemClicked.invoke(favorite, m)
@@ -112,7 +114,6 @@ fun MovieListViewPreview() {
     )
     MovieListView(
         modifier = Modifier,
-        listState = rememberLazyListState(),
         pagingItems = list.collectAsLazyPagingItems(),
         onFavoriteItemClicked = { _, _ -> },
         onMovieItemClicked = {}

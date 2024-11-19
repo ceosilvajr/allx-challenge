@@ -2,7 +2,6 @@ package com.galton.movies.ui.pages
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,11 +21,9 @@ fun MoviesPage(
     onFavoriteItemClicked: (Boolean, Movie) -> Unit,
     onMovieItemClicked: (Movie) -> Unit
 ) {
-    val allMoviesListState = rememberLazyListState()
     Box(modifier = modifier) {
         MovieListView(
             Modifier.padding(top = 16.dp),
-            listState = allMoviesListState,
             pagingItems = pagingItems,
             onFavoriteItemClicked = onFavoriteItemClicked,
             onMovieItemClicked

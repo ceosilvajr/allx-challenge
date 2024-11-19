@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import com.galton.movies.repository.MovieRepository
 import com.galton.network.NetworkManager
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -56,7 +57,7 @@ class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
             Timber.e(t)
         }
-        viewModelScope.launch(coroutineExceptionHandler) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             repository.getAndUpdateMovies()
         }
     }
@@ -65,7 +66,7 @@ class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
             Timber.e(t)
         }
-        viewModelScope.launch(coroutineExceptionHandler) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             repository.addFavoriteMovie(movieId)
         }
     }
@@ -74,7 +75,7 @@ class MovieViewModel(app: Application) : AndroidViewModel(app), KoinComponent {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, t ->
             Timber.e(t)
         }
-        viewModelScope.launch(coroutineExceptionHandler) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             repository.deleteFavoriteMovie(movieId)
         }
     }

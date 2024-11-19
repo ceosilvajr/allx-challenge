@@ -10,13 +10,17 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.galton.database.movie.MovieTable
 import com.galton.movies.NavigationItem
 import com.galton.movies.viewmodel.MovieViewModel
 
 @Composable
 fun ContentMain(
     viewModel: MovieViewModel,
+    moviesPagingItems: LazyPagingItems<MovieTable>,
+    favoritesPagingItems: LazyPagingItems<MovieTable>,
     navController: NavHostController,
     paddingValues: PaddingValues,
     onShowAppBar: (Boolean) -> Unit
@@ -26,7 +30,7 @@ fun ContentMain(
             onShowAppBar.invoke(false)
             MoviesPage(
                 modifier = Modifier.padding(paddingValues),
-                pagingItems = viewModel.moviesPager().collectAsLazyPagingItems(),
+                pagingItems = moviesPagingItems,
                 onMovieItemClicked = {
                     navController.navigate("${NavigationItem.MovieDetails.route}/${it.id}")
                 },
@@ -45,7 +49,7 @@ fun ContentMain(
             onShowAppBar.invoke(false)
             MoviesPage(
                 modifier = Modifier.padding(paddingValues),
-                pagingItems = viewModel.favoriteMoviesPager().collectAsLazyPagingItems(),
+                pagingItems = favoritesPagingItems,
                 onMovieItemClicked = {
                     navController.navigate("${NavigationItem.MovieDetails.route}/${it.id}")
                 },

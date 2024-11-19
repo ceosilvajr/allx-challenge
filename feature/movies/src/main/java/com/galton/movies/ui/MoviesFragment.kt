@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.galton.movies.NavigationItem
 import com.galton.movies.R
 import com.galton.movies.ui.components.MovieSearchBar
@@ -56,6 +57,8 @@ class MoviesFragment : Fragment() {
                     ) {
                         val navController = rememberNavController()
                         var showAppBar by rememberSaveable { mutableStateOf(true) }
+                        val moviesPagingItems = viewModel.moviesPager().collectAsLazyPagingItems()
+                        val favoritesPagingItems = viewModel.favoriteMoviesPager().collectAsLazyPagingItems()
 
                         Scaffold(
                             topBar = {
@@ -100,9 +103,13 @@ class MoviesFragment : Fragment() {
                         ) { paddingValues ->
                             ContentMain(
                                 viewModel = viewModel,
+                                moviesPagingItems = moviesPagingItems,
+                                favoritesPagingItems = favoritesPagingItems,
                                 navController = navController,
                                 paddingValues = paddingValues,
-                                onShowAppBar = { showAppBar = it }
+                                onShowAppBar = {
+                                    showAppBar = it
+                                }
                             )
                         }
                     }

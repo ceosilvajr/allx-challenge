@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -101,7 +102,7 @@ private fun MovieSearchBar(
     ) {
         LazyColumn {
             items(
-                pagingItems.itemCount,
+                count = pagingItems.itemCount,
                 key = pagingItems.itemKey { it.id }
             ) { index ->
                 val movie = pagingItems[index]?.toMovie()
@@ -121,6 +122,21 @@ private fun MovieSearchBar(
                                 textSizes = TextSizes.DETAILS
                             )
                         )
+                    }
+                }
+            }
+            pagingItems.apply {
+                when {
+                    loadState.append is LoadState.NotLoading && itemCount == 0 -> {
+                        item {
+                            EmptyView(R.string.message_empty_list)
+                        }
+                    }
+
+                    loadState.refresh is LoadState.Error -> {
+                        item {
+                            EmptyView(R.string.message_something_wrong)
+                        }
                     }
                 }
             }
