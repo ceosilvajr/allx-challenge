@@ -14,5 +14,6 @@ data class MovieTable(
     @ColumnInfo(name = "genre") val genre: String?,
     @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo(name = "favorite") val favorite: Boolean?,
-    @ColumnInfo(name = "artist_name") val artistName: String?
+    @ColumnInfo(name = "artist_name") val artistName: String?,
+    @ColumnInfo(name = "updated_at") val updatedAt: Long?
 )

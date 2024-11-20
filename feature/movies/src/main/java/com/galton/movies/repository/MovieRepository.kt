@@ -35,7 +35,8 @@ class MovieRepository(val api: MoviesApiService, val movieDao: MovieDao) {
         val response = api.getMovies(
             term = "star", country = "au", media = "movie"
         ).results.map {
-            it.toMovieTable(false)
+            val updatedAt = System.currentTimeMillis()
+            it.toMovieTable(false, updatedAt)
         }
         retainFavoritesData(response)
     }

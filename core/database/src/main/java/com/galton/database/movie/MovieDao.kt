@@ -51,7 +51,7 @@ interface MovieDao {
 
     @Transaction
     suspend fun insertFavoriteMovie(movieId: Int) {
-        val movie = getByIdSuspend(movieId)?.copy(favorite = true)
+        val movie = getByIdSuspend(movieId)?.copy(favorite = true, updatedAt = System.currentTimeMillis())
         if (movie != null) {
             insert(movie)
         }
@@ -59,7 +59,7 @@ interface MovieDao {
 
     @Transaction
     suspend fun deleteFavoriteMovie(movieId: Int) {
-        val movie = getByIdSuspend(movieId)?.copy(favorite = false)
+        val movie = getByIdSuspend(movieId)?.copy(favorite = false, updatedAt = System.currentTimeMillis())
         if (movie != null) {
             insert(movie)
         }

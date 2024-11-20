@@ -181,7 +181,8 @@ fun MovieDetailsPagePreview() {
         "Romance",
         "Visionary director J.J. Abrams brings to life the motion picture event of a generation. As Kylo Ren and the sinister First Order rise from the ashes of the Empire, Luke Skywalker is missing when the galaxy needs him most. It's up to Rey, a desert scavenger, and Finn, a defecting stormtrooper, to join forces with Han Solo and Chewbacca in a desperate search for the one hope of restoring peace to the galaxy.",
         false,
-        "Bradley Cooper"
+        "Bradley Cooper",
+        0L
     )
     MovieDetailsPage(Modifier, movie) { _, _ -> }
 }

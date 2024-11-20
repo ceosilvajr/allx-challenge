@@ -18,7 +18,6 @@ import com.galton.models.Movie
 import com.galton.movies.R
 import com.galton.movies.toMovie
 import kotlinx.coroutines.flow.flowOf
-import kotlin.random.Random
 
 @Composable
 fun MovieListView(
@@ -37,7 +36,7 @@ fun MovieListView(
             items(
                 count = pagingItems.itemCount,
                 key = pagingItems.itemKey {
-                    "${it.id}${Random.nextInt()}" // This will make sure that the items are not duplicated
+                    "${it.id}${it.updatedAt}"
                 }
             ) { index ->
                 val movie = pagingItems[index]?.toMovie()
@@ -98,6 +97,7 @@ fun MovieListViewPreview() {
                     "-",
                     true,
                     "Bradley Cooper",
+                    updatedAt = 0L
                 ),
                 MovieTable(
                     0,
@@ -108,6 +108,7 @@ fun MovieListViewPreview() {
                     "-",
                     false,
                     "Bradley Cooper",
+                    updatedAt = 0L
                 )
             )
         )

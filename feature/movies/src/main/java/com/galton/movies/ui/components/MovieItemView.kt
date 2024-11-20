@@ -72,7 +72,9 @@ fun MovieItemView(
             )
             Spacer(modifier = Modifier.padding(horizontal = 8.dp))
             Column(
-                modifier = Modifier.weight(1f).padding(top = 8.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 8.dp),
                 horizontalAlignment = Alignment.Start
             ) {
                 TextView(
@@ -125,6 +127,7 @@ fun MovieItemPreview() {
             "-",
             false,
             "Bradley Cooper",
+            updatedAt = 0L
         ),
         onFavoriteItemClicked = { _, _ -> },
         onMovieItemClicked = {}

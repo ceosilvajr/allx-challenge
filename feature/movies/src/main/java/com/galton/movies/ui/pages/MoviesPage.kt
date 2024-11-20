@@ -46,6 +46,7 @@ fun MoviesPagePreview() {
                     "-",
                     true,
                     "Bradley Cooper",
+                    0L
                 ),
                 MovieTable(
                     0,
@@ -56,6 +57,7 @@ fun MoviesPagePreview() {
                     "-",
                     false,
                     "Bradley Cooper",
+                    0L
                 )
             )
         )

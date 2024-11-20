@@ -4,7 +4,7 @@ import com.galton.database.movie.MovieTable
 import com.galton.models.Movie
 import com.galton.network.response.MovieItem
 
-fun MovieItem.toMovieTable(favorite: Boolean): MovieTable {
+fun MovieItem.toMovieTable(favorite: Boolean, updatedAt: Long): MovieTable {
     return MovieTable(
         id = this.id ?: 0,
         name = this.trackName,
@@ -14,6 +14,7 @@ fun MovieItem.toMovieTable(favorite: Boolean): MovieTable {
         description = this.description,
         favorite = favorite,
         artistName = this.artistName,
+        updatedAt = updatedAt,
     )
 }
 
@@ -27,6 +28,7 @@ fun MovieTable.toMovie(): Movie {
         description = this.description,
         favorite = this.favorite,
         artistName = this.artistName,
+        updatedAt = this.updatedAt,
     )
 }
 
@@ -40,5 +42,6 @@ fun movieInitialState(): Movie {
         description = "",
         favorite = false,
         artistName = "",
+        updatedAt = 0L
     )
 }
