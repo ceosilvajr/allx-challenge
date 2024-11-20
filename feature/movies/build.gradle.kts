@@ -1,3 +1,6 @@
+import kotlinx.kover.gradle.plugin.dsl.AggregationType
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+
 
 plugins {
     alias(libs.plugins.android.library)
@@ -5,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kover)
 }
 
 android {
@@ -41,6 +45,28 @@ android {
         compose = true
         buildConfig = true
     }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
+        }
+    }
+}
+
+// This is required for mockK issue https://mockk.io/doc/md/jdk16-access-exceptions.html
+tasks.withType<Test>().all {
+    jvmArgs(
+        "--add-opens", "java.base/java.time=ALL-UNNAMED",
+        "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED"
+    )
 }
 
 detekt {
@@ -56,11 +82,33 @@ detekt {
     basePath = projectDir.absolutePath
 }
 
+kover {
+    reports {
+        verify {
+            rule {
+                bound {
+                    minValue = 50
+                    coverageUnits = CoverageUnit.LINE
+                    aggregationForGroup = AggregationType.COVERED_PERCENTAGE
+                }
+            }
+        }
+        filters {
+            includes {
+                classes(
+                    "*Repository"
+                )
+            }
+        }
+    }
+}
+
 dependencies {
     implementation(project(":core:models"))
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:utils"))
+    implementation(project(":core:test"))
 
     implementation(libs.timber)
 
@@ -87,12 +135,33 @@ dependencies {
     implementation(libs.compose.coil)
     implementation(libs.compose.coil.network)
 
+    ksp(libs.moshi.codegen)
+    implementation(libs.moshi)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    testImplementation(libs.koin.core)
+    testImplementation(libs.test.koin)
+    testImplementation(libs.test.mockServer)
+    testImplementation(libs.test.kotest.assertions.core)
+    testImplementation(libs.test.androidx.ext.junit)
+    testImplementation(libs.test.robolectric)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.mockk.android)
+    testImplementation(libs.test.mockk.agent)
+    testImplementation(libs.test.androidx.arch.core)
+    testImplementation(libs.test.androidx.core.ktx)
+    testImplementation(libs.test.kotlinx.coroutines)
+    testImplementation(libs.test.turbine)
 
     detekt(libs.detekt.cli)
     detektPlugins(libs.detekt.plugins)

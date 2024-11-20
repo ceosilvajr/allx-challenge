@@ -1,8 +1,12 @@
+import kotlinx.kover.gradle.plugin.dsl.AggregationType
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kover)
 }
 
 android {
@@ -45,6 +49,26 @@ android {
         compose = true
         buildConfig = true
     }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
+        }
+    }
+}
+
+tasks.withType<Test>().all {
+    jvmArgs(
+        "--add-opens", "java.base/java.time=ALL-UNNAMED",
+        "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED"
+    )
 }
 
 detekt {
@@ -58,6 +82,27 @@ detekt {
     disableDefaultRuleSets = false
     ignoreFailures = true
     basePath = projectDir.absolutePath
+}
+
+kover {
+    reports {
+        verify {
+            rule {
+                bound {
+                    minValue = 50
+                    coverageUnits = CoverageUnit.LINE
+                    aggregationForGroup = AggregationType.COVERED_PERCENTAGE
+                }
+            }
+        }
+        filters {
+            includes {
+                classes(
+                    "*Repository"
+                )
+            }
+        }
+    }
 }
 
 dependencies {
@@ -88,7 +133,6 @@ dependencies {
     implementation(libs.androidx.material3)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
@@ -97,4 +141,6 @@ dependencies {
 
     detekt(libs.detekt.cli)
     detektPlugins(libs.detekt.plugins)
+
+    kover(project(":feature:movies"))
 }
