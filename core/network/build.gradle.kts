@@ -17,9 +17,13 @@ android {
 
     buildTypes {
         release {
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        debug {
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -49,7 +53,6 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
 
     implementation(project.dependencies.platform(libs.koin))
     implementation(libs.koin.core)
@@ -68,8 +71,6 @@ dependencies {
     releaseApi(libs.chucker.noop)
 
     testImplementation(libs.junit)
-
-    androidTestImplementation(libs.androidx.espresso.core)
 
     detekt(libs.detekt.cli)
     detektPlugins(libs.detekt.plugins)

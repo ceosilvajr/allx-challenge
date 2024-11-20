@@ -17,17 +17,19 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        debug {
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -87,7 +89,7 @@ kover {
         verify {
             rule {
                 bound {
-                    minValue = 50
+                    minValue = 95
                     coverageUnits = CoverageUnit.LINE
                     aggregationForGroup = AggregationType.COVERED_PERCENTAGE
                 }
@@ -143,12 +145,10 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    testImplementation(libs.junit)
     testImplementation(libs.koin.core)
     testImplementation(libs.test.koin)
     testImplementation(libs.test.mockServer)
@@ -162,6 +162,8 @@ dependencies {
     testImplementation(libs.test.androidx.core.ktx)
     testImplementation(libs.test.kotlinx.coroutines)
     testImplementation(libs.test.turbine)
+
+    androidTestImplementation(libs.androidx.espresso.core)
 
     detekt(libs.detekt.cli)
     detektPlugins(libs.detekt.plugins)

@@ -21,9 +21,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "Appetiser Challenge"
 include(":app")
+include(":feature:movies")
 include(":core:database")
 include(":core:network")
 include(":core:models")
-include(":feature:movies")
 include(":core:utils")
 include(":core:test")
