@@ -29,7 +29,7 @@ This project demonstrates a modern Android app built with a robust and efficient
 ---
 
 ### **Database**
-- **Room**  
+- **[Room](https://developer.android.com/training/data-storage/room)**  
   Android's persistence library for managing local database operations with a modern SQLite wrapper.
 
 ---
