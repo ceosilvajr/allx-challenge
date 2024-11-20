@@ -33,7 +33,9 @@ class MovieRepository(val api: MoviesApiService, val movieDao: MovieDao) {
      */
     suspend fun getAndUpdateMovies() {
         val response = api.getMovies(
-            term = "star", country = "au", media = "movie"
+            term = "star",
+            country = "au",
+            media = "movie"
         ).results.map {
             val updatedAt = System.currentTimeMillis()
             it.toMovieTable(false, updatedAt)

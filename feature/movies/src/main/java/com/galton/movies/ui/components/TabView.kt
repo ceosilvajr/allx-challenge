@@ -14,7 +14,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -69,14 +68,8 @@ fun TabView(navController: NavController) {
                 },
                 label = {
                     TextView(TextView.Model(string = tabBarItem.title, textSizes = TextSizes.DESCRIPTION))
-                })
+                }
+            )
         }
     }
-}
-
-
-@Preview
-@Composable
-fun TabViewPreview() {
-
 }

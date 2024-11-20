@@ -1,8 +1,10 @@
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp.library)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -39,6 +41,19 @@ android {
         compose = true
         buildConfig = true
     }
+}
+
+detekt {
+    toolVersion = libs.versions.detektVersion.get()
+    source.setFrom("src/main/java", "src/main/kotlin")
+    parallel = true
+    config.setFrom("${rootProject.projectDir}/detekt/config.yml")
+    buildUponDefaultConfig = true
+    allRules = false
+    baseline = file("${rootProject.projectDir}/detekt/baseline.xml")
+    disableDefaultRuleSets = false
+    ignoreFailures = true
+    basePath = projectDir.absolutePath
 }
 
 dependencies {
@@ -78,4 +93,7 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    detekt(libs.detekt.cli)
+    detektPlugins(libs.detekt.plugins)
 }

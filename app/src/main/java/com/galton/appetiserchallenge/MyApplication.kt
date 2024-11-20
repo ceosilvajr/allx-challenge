@@ -34,6 +34,5 @@ class MyApplication : Application() {
             androidContext(this@MyApplication)
             modules(modules)
         }
-
     }
 }

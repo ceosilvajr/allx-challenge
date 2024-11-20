@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -46,6 +47,19 @@ android {
     }
 }
 
+detekt {
+    toolVersion = libs.versions.detektVersion.get()
+    source.setFrom("src/main/java", "src/main/kotlin")
+    parallel = true
+    config.setFrom("${rootProject.projectDir}/detekt/config.yml")
+    buildUponDefaultConfig = true
+    allRules = false
+    baseline = file("${rootProject.projectDir}/detekt/baseline.xml")
+    disableDefaultRuleSets = false
+    ignoreFailures = true
+    basePath = projectDir.absolutePath
+}
+
 dependencies {
     implementation(project(":feature:movies"))
     implementation(project(":core:network"))
@@ -80,4 +94,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    detekt(libs.detekt.cli)
+    detektPlugins(libs.detekt.plugins)
 }

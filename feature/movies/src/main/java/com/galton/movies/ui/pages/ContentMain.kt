@@ -11,7 +11,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.galton.database.movie.MovieTable
 import com.galton.movies.NavigationItem
 import com.galton.movies.viewmodel.MovieViewModel

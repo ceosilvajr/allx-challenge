@@ -44,7 +44,9 @@ class MoviesFragment : Fragment() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         viewModel.getMovies()
         return ComposeView(requireContext()).apply {
@@ -82,7 +84,6 @@ class MoviesFragment : Fragment() {
                                             }
                                         }
                                     )
-
                                 } else {
                                     MovieSearchBar(
                                         modifier = Modifier
@@ -90,7 +91,7 @@ class MoviesFragment : Fragment() {
                                             .padding(horizontal = 24.dp),
                                         viewModel = viewModel,
                                         onMovieItemClicked = {
-                                            navController.navigate("${NavigationItem.MovieDetails.route}/${it}")
+                                            navController.navigate("${NavigationItem.MovieDetails.route}/$it")
                                         }
                                     )
                                 }

@@ -107,14 +107,16 @@ private fun MovieSearchBar(
             ) { index ->
                 val movie = pagingItems[index]?.toMovie()
                 if (movie != null) {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable {
-                            expanded.value = false
-                            queryState.value = null
-                            onMovieItemClicked.invoke(movie.id.toString())
-                        }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable {
+                                expanded.value = false
+                                queryState.value = null
+                                onMovieItemClicked.invoke(movie.id.toString())
+                            }
+                    ) {
                         TextView(
                             TextView.Model(
                                 modifier = Modifier,

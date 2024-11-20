@@ -169,10 +169,11 @@ fun <T> MutableLiveData<Resource<T>>.toNetworkError(
 
 fun <T> MutableLiveData<T>.setLiveDataValue(value: T?) {
     try {
-        if (Looper.myLooper() == Looper.getMainLooper())
+        if (Looper.myLooper() == Looper.getMainLooper()) {
             this.value = value
-        else
+        } else {
             this.postValue(value)
+        }
     } catch (t: Throwable) {
         Timber.e(t, t.message)
     }

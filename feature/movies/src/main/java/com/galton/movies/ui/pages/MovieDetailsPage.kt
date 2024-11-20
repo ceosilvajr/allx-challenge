@@ -139,7 +139,8 @@ private fun MovieDetailsPage(
             Spacer(modifier = Modifier.padding(8.dp))
             Row {
                 movie.genre?.let {
-                    SuggestionChip(modifier = Modifier.height(24.dp),
+                    SuggestionChip(
+                        modifier = Modifier.height(24.dp),
                         onClick = { },
                         label = {
                             TextView(
@@ -153,7 +154,8 @@ private fun MovieDetailsPage(
                 }
                 Spacer(modifier = Modifier.padding(6.dp))
                 movie.artistName?.let {
-                    SuggestionChip(modifier = Modifier.height(24.dp),
+                    SuggestionChip(
+                        modifier = Modifier.height(24.dp),
                         onClick = { },
                         label = {
                             TextView(

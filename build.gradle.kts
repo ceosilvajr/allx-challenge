@@ -5,4 +5,17 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.ksp.library) apply false
+    alias(libs.plugins.detekt) apply false
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath(libs.gradle)
+        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${libs.versions.detektVersion}")
+    }
 }

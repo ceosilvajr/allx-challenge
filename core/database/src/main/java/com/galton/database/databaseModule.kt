@@ -8,7 +8,8 @@ val databaseModule = module {
     single {
         Room.databaseBuilder(
             androidContext(),
-            AppDatabase::class.java, "csj-database"
+            AppDatabase::class.java,
+            "csj-database"
         ).build()
     }
     single {

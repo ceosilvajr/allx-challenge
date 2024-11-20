@@ -43,7 +43,6 @@ fun TextView(model: TextView.Model) {
     )
 }
 
-
 @Composable
 fun TextView(
     modifier: Modifier = Modifier,
