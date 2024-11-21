@@ -42,7 +42,7 @@ fun MovieListView(
                 val movie = pagingItems[index]?.toMovie()
                 if (movie != null) {
                     MovieItemView(
-                        modifier = Modifier,
+                        modifier = Modifier.animateItem(),
                         movie = movie,
                         onFavoriteItemClicked = { favorite, m ->
                             onFavoriteItemClicked.invoke(favorite, m)
