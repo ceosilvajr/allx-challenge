@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import com.galton.models.Movie
 import com.galton.movies.R
-import com.galton.movies.movieInitialState
+import com.galton.movies.data.movieInitialState
 import com.galton.movies.ui.components.ImageView
 import com.galton.movies.ui.components.TextSizes
 import com.galton.movies.ui.components.TextView

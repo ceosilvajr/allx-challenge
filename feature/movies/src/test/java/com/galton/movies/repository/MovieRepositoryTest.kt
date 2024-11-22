@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galton.database.movie.MovieDao
 import com.galton.database.movie.MovieTable
-import com.galton.network.MoviesApiService
+import com.galton.network.service.MoviesApiService
 import com.galton.test.PagingSourceTestUtil
 import com.galton.test.RemoteServiceTestUtil
 import com.galton.test.UnitTest

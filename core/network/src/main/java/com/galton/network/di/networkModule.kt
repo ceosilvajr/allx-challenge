@@ -1,6 +1,8 @@
-package com.galton.network
+package com.galton.network.di
 
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.galton.network.service.MoviesApiService
+import com.galton.network.NetworkManager
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope

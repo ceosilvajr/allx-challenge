@@ -1,4 +1,4 @@
-package com.galton.network
+package com.galton.network.service
 
 import com.galton.network.response.MoviesResponse
 import retrofit2.http.GET

@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.galton.movies.NavigationItem
+import com.galton.movies.ui.NavigationItem
 import com.galton.movies.R
 
 data class TabBarItem(

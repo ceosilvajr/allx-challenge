@@ -3,9 +3,9 @@ package com.galton.movies.repository
 import androidx.paging.PagingSource
 import com.galton.database.movie.MovieDao
 import com.galton.database.movie.MovieTable
-import com.galton.movies.toMovie
-import com.galton.movies.toMovieTable
-import com.galton.network.MoviesApiService
+import com.galton.movies.data.toMovie
+import com.galton.movies.data.toMovieTable
+import com.galton.network.service.MoviesApiService
 import kotlinx.coroutines.flow.map
 
 class MovieRepository(val api: MoviesApiService, val movieDao: MovieDao) {

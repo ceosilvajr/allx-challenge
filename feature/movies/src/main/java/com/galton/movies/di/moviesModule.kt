@@ -1,4 +1,4 @@
-package com.galton.movies
+package com.galton.movies.di
 
 import com.galton.movies.repository.MovieRepository
 import com.galton.movies.viewmodel.MovieViewModel

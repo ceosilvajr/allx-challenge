@@ -1,4 +1,4 @@
-package com.galton.movies
+package com.galton.movies.data
 
 import com.galton.database.movie.MovieTable
 import com.galton.models.Movie

@@ -16,7 +16,7 @@ import androidx.paging.compose.itemKey
 import com.galton.database.movie.MovieTable
 import com.galton.models.Movie
 import com.galton.movies.R
-import com.galton.movies.toMovie
+import com.galton.movies.data.toMovie
 import kotlinx.coroutines.flow.flowOf
 
 @Composable

@@ -1,9 +1,9 @@
 package com.galton.appetiserchallenge
 
 import android.app.Application
-import com.galton.database.databaseModule
-import com.galton.movies.moviesModule
-import com.galton.network.networkModule
+import com.galton.database.di.databaseModule
+import com.galton.movies.di.moviesModule
+import com.galton.network.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

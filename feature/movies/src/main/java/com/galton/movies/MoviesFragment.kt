@@ -1,4 +1,4 @@
-package com.galton.movies.ui
+package com.galton.movies
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,8 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.galton.movies.NavigationItem
-import com.galton.movies.R
+import com.galton.movies.ui.NavigationItem
 import com.galton.movies.ui.components.MovieSearchBar
 import com.galton.movies.ui.components.TabView
 import com.galton.movies.ui.components.TextView

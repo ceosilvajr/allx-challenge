@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/moviesFragment"
-        android:name="com.galton.movies.ui.MoviesFragment"
+        android:name="com.galton.movies.MoviesFragment"
         android:label="MoviesFragment" />
 
 </navigation>

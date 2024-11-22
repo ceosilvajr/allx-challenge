@@ -1,4 +1,4 @@
-package com.galton.movies
+package com.galton.movies.ui
 
 enum class Page {
     HOME,

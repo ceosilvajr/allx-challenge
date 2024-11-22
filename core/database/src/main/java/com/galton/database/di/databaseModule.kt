@@ -1,6 +1,7 @@
-package com.galton.database
+package com.galton.database.di
 
 import androidx.room.Room
+import com.galton.database.AppDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
